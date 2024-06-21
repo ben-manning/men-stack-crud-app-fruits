@@ -11,6 +11,8 @@ mongoose.connection.on('connected', () => {
   console.log(`Connected to MongoDB ${mongoose.connection.name}`);
 });
 
+const Fruit = require('./models/fruit.js');
+
 // GET /
 app.get('/', async (req, res) => {
   res.render('index.ejs');
