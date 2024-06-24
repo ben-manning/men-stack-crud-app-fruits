@@ -2,6 +2,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
+const morgan = require('morgan');
 
 const app = express();
 
@@ -15,6 +17,8 @@ const Fruit = require('./models/fruit.js');
 
 // middleware
 app.use(express.urlencoded({ extended: false }));
+app.use(methodOverride('_method'));
+app.use(morgan('dev'));
 
 // GET /
 app.get('/', async (req, res) => {
@@ -23,7 +27,6 @@ app.get('/', async (req, res) => {
 
 app.get('/fruits', async (req, res) => {
   const allFruits = await Fruit.find();
-  console.log(allFruits);
   res.render('fruits/index.ejs', { fruits: allFruits });
 });
 
@@ -45,6 +48,11 @@ app.post('/fruits', async (req, res) => {
     req.body.isReadyToEat = false;
   }
   await Fruit.create(req.body);
+  res.redirect('/fruits');
+});
+
+app.delete('/fruits/:fruitId', async (req, res) => {
+  await Fruit.findByIdAndDelete(req.params.fruitId);
   res.redirect('/fruits');
 });
 
