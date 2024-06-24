@@ -40,12 +40,25 @@ app.get('/fruits/:fruitId', async (req, res) => {
   res.render('fruits/show.ejs', { fruit: foundFruit });
 });
 
+// GET /fruits/:fruitId/edit
 app.get('/fruits/:fruitId/edit', async (req, res) => {
   const foundFruit = await Fruit.findById(req.params.fruitId);
   console.log(foundFruit);
   res.render('fruits/edit.ejs', {
     fruit: foundFruit,
   });
+});
+
+app.put('/fruits/:fruitId', async (req, res) => {
+  if (req.body.isReadyToEat === "on") {
+    req.body.isReadyToEat = true;
+  } else {
+    req.body.isReadyToEat = false;
+  }
+
+  await Fruit.findByIdAndUpdate(req.params.fruitId, req.body);
+
+  res.redirect(`/fruits/${req.params.fruitId}`);
 });
 
 // POST /fruits
