@@ -3,6 +3,8 @@ dotenv.config();
 
 const express = require('express');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
+const morgan = require('morgan');
 
 const app = express();
 
@@ -16,6 +18,8 @@ const Fruit = require('./models/fruit.js');
 
 // middleware
 app.use(express.urlencoded({ extended: false }));
+app.use(methodOverride('_method'));
+app.use(morgan('dev'));
 
 
 
@@ -54,7 +58,15 @@ app.post('/fruits', async (req, res) => {
   res.redirect('/fruits');
 });
 
+app.delete('/fruits/:fruitId', async (req, res) => {
+  await Fruit.findByIdAndDelete(req.params.fruitId);
+  res.redirect('/fruits');
+}); 
 
+app.get('/fruits/:fruitId/edit', async (req, res) => {
+  const foundFruit = await Fruit.findById(req.params.fruitId);
+  res.render('fruits/edit.ejs', { fruit: foundFruit });
+});
 
 
 app.listen(3000, () => {
