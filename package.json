@@ -16,5 +16,8 @@
     "url": "https://github.com/ben-manning/men-stack-crud-app-fruits/issues"
   },
   "homepage": "https://github.com/ben-manning/men-stack-crud-app-fruits#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
 }
