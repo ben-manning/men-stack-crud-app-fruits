@@ -14,6 +14,10 @@ mongoose.connection.on('connected', () => {
 });
 
 
+// Import the fruit model
+const Fruit = require('./models/fruit.js');
+
+
 // GET /
 app.get('/', async (req, res) => {
   res.render('index.ejs');
