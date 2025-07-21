@@ -3,10 +3,12 @@ dotenv.config(); // using dotenv to bring the variables from the .env file
 
 const express = require('express');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
+const morgan = require('morgan');
 
 const app = express();
 
-
+// =============== model connection/logic ===============
 mongoose.connect(process.env.MONGODB_URI);
 
 mongoose.connection.on('connected', () => {
@@ -15,10 +17,12 @@ mongoose.connection.on('connected', () => {
 
 // Import the fruit model
 const Fruit = require('./models/fruit.js');
+// ======================================================
 
 // adding middleware for app
 app.use(express.urlencoded({ extended: false }));
-
+app.use(methodOverride('_method'));
+app.use(morgan('dev'));
 
 // GET /
 app.get('/', async (req, res) => {
@@ -51,6 +55,12 @@ app.post('/fruits', async (req, res) => {
   }
 
   await Fruit.create(req.body); // this line is the database transaction
+  res.redirect('/fruits');
+});
+
+// DELETE route
+app.delete('/fruits/:fruitId', async (req, res) => {
+  await Fruit.findByIdAndDelete(req.params.fruitId);
   res.redirect('/fruits');
 });
 
