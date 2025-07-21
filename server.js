@@ -64,6 +64,12 @@ app.delete('/fruits/:fruitId', async (req, res) => {
   res.redirect('/fruits');
 });
 
+app.get('/fruits/:fruitId/edit', async (req, res) => {
+  const foundFruit = await Fruit.findById(req.params.fruitId);
+  console.log(foundFruit);
+  res.render('fruits/edit.ejs', { fruit: foundFruit });
+});
+
 
 app.listen(3000, () => {
   console.log('Listening on port 3000');
